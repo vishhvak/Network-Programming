@@ -9,6 +9,7 @@ int main() {
     char *msg,*rcv;
     char bye[]="Bye";
     msg = malloc(256);
+    rcv = malloc(256);
 	printf("Enter port number\n");
 	scanf("%d",&portnumber);
 	//Enter port number - integer;
@@ -47,16 +48,16 @@ int main() {
     int c = 1;
     printf("\nServer Connected to Chat!\n");
     do {
-        scanf("%255s", msg);
-        send(nsd , msg , strlen(msg) , 0 );
+        scanf("%s", msg);
+        send(sd , msg , strlen(msg) , 0 );
         if(strcmp(bye,msg)==0)
         {
             c = -1;
             printf("\nClosing Chat\n");
             break;
         }
-        recv(nsd, rcv, 100, 0);
-        printf("\nClient : %255s\n",rcv);
+        recv(sd, rcv, 100, 0);
+        printf("\nClient : %s\n",rcv);
     }while(c > 0);
     close(sd);
 	return 0;

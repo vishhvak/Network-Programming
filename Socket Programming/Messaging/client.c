@@ -8,6 +8,7 @@ int main() {
 	char *msg,*rcv;
     char bye[]="Bye";
     msg = malloc(256);
+    rcv = malloc(256);
 	//Enter port number - integer;
 	int cport;
 	printf("Enter port number\n");
@@ -32,8 +33,8 @@ int main() {
     printf("\nChat Connection Successful!\n");
     int d = 1;
 	do {
-        scanf("%255s", msg);
-        send(csd , msg , strlen(msg) , 0 );
+        scanf("%s", msg);
+        send(csd , msg , strlen(msg) , 0);
         if(strcmp(bye,msg)==0)
         {
             d = -1;
@@ -41,7 +42,7 @@ int main() {
             break;
         }
         recv(csd, rcv, 100, 0);
-        printf("\nServer : %255s\n",rcv);
+        printf("\nServer : %s\n",rcv);
     }while(d > 0);
 	close(csd);
 	return 0;
