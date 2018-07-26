@@ -1,6 +1,7 @@
 #include <sys/types.h>
 #include <netinet/in.h>
 #include <stdlib.h>
+#include <unistd.h>
 #include <stdio.h>
 int main() {
 	struct sockaddr_in servaddr, cliaddr;
@@ -41,7 +42,7 @@ int main() {
         exit(EXIT_FAILURE);
     }
     else
-    	printf("Server is connected");
+    	printf("\nServer is connected!\n");
     close(sd);
 	return 0;
 }

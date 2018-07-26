@@ -1,5 +1,6 @@
 #include <netinet/in.h>
 #include <stdio.h>
+#include <unistd.h>
 #include <stdlib.h>
 int main() {
 	struct sockaddr_in servaddr;

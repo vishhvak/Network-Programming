@@ -3,13 +3,13 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#define MAXSIZE 1024
 int main() {
 	struct sockaddr_in servaddr, cliaddr;
 	int portnumber;
     char *msg,*rcv;
-    char bye[]="Bye";
-    msg = malloc(256);
-    rcv = malloc(256);
+    msg = malloc(sizeof(char) * 1024);
+    rcv = malloc(sizeof(char) * 1024);
 	printf("Enter port number\n");
 	scanf("%d",&portnumber);
 	//Enter port number - integer;
@@ -40,25 +40,41 @@ int main() {
     int clilen = sizeof(cliaddr);
     int nsd = accept(sd, (struct sockaddr*)&cliaddr, &clilen);
     //Check whether connection is accepted or not;
-    if (nsd <0)
+    if (nsd < 0)
     {
         perror("Accept");
         exit(0);
     }
-    int c = 1;
-    printf("\nServer Connected to Chat!\n");
+    int r,s,c = 1,x=0;
+    printf("\nChat mode is live!\n");
     do {
-        scanf("%s", msg);
-        send(sd , msg , strlen(msg) , 0 );
-        if(strcmp(bye,msg)==0)
+        fgets(msg,MAXSIZE-1,stdin);
+        if(strcmp("Bye",msg)==0)
         {
             c = -1;
             printf("\nClosing Chat\n");
             break;
         }
-        recv(sd, rcv, 100, 0);
-        printf("\nClient : %s\n",rcv);
+        s = send(nsd , msg , strlen(msg) , 0 );
+        if(s < 0)
+        {
+            printf("\nFailed to send message!\n");
+            break;
+        }
+        r = recv(nsd, rcv, 1024, 0);
+        if(r < 0)
+        {
+            printf("\nFailed to Recieve message!\n");
+            break;
+        }
+        if(x==0) {
+            printf("\nClient : Online! \n\n");
+            ++x;
+        }
+        else
+            printf("\nClient : %s \n", rcv);
     }while(c > 0);
+    close(nsd);
     close(sd);
 	return 0;
 }
