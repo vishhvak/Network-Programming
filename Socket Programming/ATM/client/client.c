@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
+#include <unistd.h>
+#include <stdlib.h>
 #include <string.h>
 
 //Needs to be improvised with function specific code to make it neater
@@ -13,8 +15,7 @@ int main(){
 	socklen_t addr_size;
 	clientSoc = socket(AF_INET, SOCK_STREAM, 0);
 	serverAddr.sin_family = AF_INET;
-	serverAddr.sin_port = htons(1334);
-	serverAddr.sin_addr.s_addr = inet_addr("172.16.13.201");
+	serverAddr.sin_port = htons(4514);
 	memset(serverAddr.sin_zero, '\0', sizeof(serverAddr.sin_zero));
 	addr_size = sizeof(serverAddr);
 	int c = connect(clientSoc,(struct sockaddr*)&serverAddr,sizeof(serverAddr));

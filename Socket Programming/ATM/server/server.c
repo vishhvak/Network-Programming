@@ -3,6 +3,7 @@
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netdb.h>
+#include <unistd.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -14,8 +15,7 @@ int main() {
 	socklen_t addr_size, client_addr_size;
 	sock = socket(AF_INET, SOCK_STREAM, 0);
 	serverAddr.sin_family = AF_INET;
-	serverAddr.sin_port = htons(1334);
-	serverAddr.sin_addr.s_addr = inet_addr("172.16.13.201");
+	serverAddr.sin_port = htons(4514);
 	memset(serverAddr.sin_zero, '\0', sizeof(serverAddr.sin_zero));
 	int b = bind(sock, (struct sockaddr *) &serverAddr, sizeof(serverAddr));
 	addr_size = sizeof(serverStorage);
@@ -40,7 +40,7 @@ int main() {
     }
     printf("Connection Established\n");
 	char menu[] = "Enter an Option --- 1. Deposit  2. Withdraw  3. Balance  4. Exit";
-	int opt, option,amt,balance = 0;
+	int opt, option,amount,amt,balance = 0;
 	while(1) {
 		sendto(sock, menu,sizeof(menu),0,(struct sockaddr*)&serverStorage, addr_size);
 		nBytes = recvfrom(sock,buffer,1024,0,(struct sockaddr *)&serverStorage, &addr_size);
@@ -80,6 +80,6 @@ int main() {
 				break;
 		}
 	}
-	close(sock);+
+	close(sock);
 	return 0;
 }

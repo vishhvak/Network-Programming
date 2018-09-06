@@ -46,8 +46,10 @@ int main() {
         exit(0);
     }
     int r,s,c = 1,x=0;
+    r = recv(nsd, rcv, 1024, 0);
     printf("\nChat mode is live!\n");
     do {
+        printf("\nClient : %s \n", rcv);
         fgets(msg,MAXSIZE-1,stdin);
         if(strcmp("Bye",msg)==0)
         {
@@ -67,12 +69,6 @@ int main() {
             printf("\nFailed to Recieve message!\n");
             break;
         }
-        if(x==0) {
-            printf("\nClient : Online! \n\n");
-            ++x;
-        }
-        else
-            printf("\nClient : %s \n", rcv);
     }while(c > 0);
     close(nsd);
     close(sd);
