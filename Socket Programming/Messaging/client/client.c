@@ -9,14 +9,10 @@ int main() {
 
 	struct sockaddr_in servaddr;
 
-	char *msg,*rcv;
-    msg = malloc(sizeof(char) * 1024);
-    rcv = malloc(sizeof(char) * 1024);
-
 	//Enter port number - integer;
-	int cport;
-	printf("Enter port number\n");
-	scanf("%d",&cport);
+	int cport = 1877;
+	// printf("Enter port number\n");
+	// scanf("%d",&cport);
 
 	int client = socket(AF_INET, SOCK_STREAM, 0);
 	//Check if socket is created or not;
@@ -37,58 +33,40 @@ int main() {
         return -1;
     }
 
-    int s,r;
+
     printf("\nChat mode is live!\n");
 
-    int d = 1, x=0, y=0;
-
-	do {
-
-        msg = malloc(sizeof(char) * 1024);
-        rcv = malloc(sizeof(char) * 1024);
+    char msg[1024], rcv[1024];
+	
+    while(1)
+    {
+        printf("\nClient : ");
         
-        if(x == 0) {
-            printf("\nClient : Initial ACK ");
-            ++x;
-        }
-        else if (x!=0)
+        fgets(msg,1024,stdin);
+        int s = send(client , msg , 1024, 0);
+        
+        if(s < 0)
+            printf("\nFailed to send message to server!\n");
+        
+        if(strcmp("Bye",msg)==0)
         {
-            printf("\nClient : ");
-            fgets(msg,1024,stdin);
-            s = send(client , msg , strlen(msg) , 0);
-            if(s < 0)
-            {
-                printf("\nFailed to send message!\n");
-                break;
-            }
-        }
-
-        if(y==0) {
-            printf("\nServer : Online! \n\n");
-            ++y;
-        }
-        else if(y!=0) 
-        {
-            r = recv(client, rcv, 1024, 0);
-            if(r < 0)
-            {
-                printf("\nFailed to Recieve message!\n");
-                break;
-            }
-            printf("\nServer : %s \n", rcv);
-        }
-            
-        /*if(strcmp("Bye",msg)==0)
-        {
-            d = -1;
             printf("\nClosing Chat\n");
             break;
-        }*/
-
-        free(msg);
-        free(rcv);
-
-    }while(d > 0);
+        }
+        
+        int r = recv(client, rcv, 1024, 0);
+        
+        if(r > 0)
+            printf("\nServer : %s \n", rcv);
+        else if(r < 0)
+            printf("\nFailed to recieve message from server!\n");
+        
+        if(strcmp("Bye", rcv)==0)
+        {
+            printf("\nClosing Chat\n");
+            break;
+        }
+    }
 
 	close(client);
 	return 0;
